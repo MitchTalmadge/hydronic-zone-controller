@@ -1,6 +1,8 @@
 package zone
 
 import (
+	"time"
+
 	"github.com/mitchtalmadge/hydronic-zone-controller/src/gpio"
 )
 
@@ -60,6 +62,7 @@ func commit() {
 
 	// Turn on boiler after opening any zones.
 	if anyZonesOpen {
+		time.Sleep(5 * time.Second) // Allow valves time to open before pumping water.
 		gpio.OpenRelay(boilerRelayChannel)
 	}
 }
