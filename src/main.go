@@ -8,7 +8,7 @@ import (
 	"github.com/mitchtalmadge/hydronic-zone-controller/src/zone"
 )
 
-var zoneActionChan = make(chan zone.ZoneAction)
+var zoneActionChan = make(chan zone.ZoneAction, 10)
 
 func main() {
 	gpio.Init()
