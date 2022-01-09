@@ -4,40 +4,42 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+
+	"github.com/mitchtalmadge/hydronic-zone-controller/src/zone"
 )
 
 func zoneOpenHandler(w http.ResponseWriter, r *http.Request) {
-	zone, err := strconv.Atoi(r.FormValue("zone"))
+	zoneNum, err := strconv.Atoi(r.FormValue("zone"))
 	if err != nil {
 		fmt.Fprintf(w, "Cannot parse zone")
 		return
 	}
-	if zone < 1 || zone > 7 {
+	if zoneNum < 1 || zoneNum > zone.ZoneCount {
 		fmt.Fprintf(w, "Invalid zone")
 		return
 	}
 
-	valveChan <- valveAction{valveActionOpenOne, zoneValves[zone-1]}
+	zoneActionChan <- zone.ZoneAction{ActionType: zone.ZoneActionOpenOne, Zone: zoneNum}
 }
 
 func zoneOpenAllHandler(w http.ResponseWriter, r *http.Request) {
-	valveChan <- valveAction{valveActionOpenAll, 0}
+	zoneActionChan <- zone.ZoneAction{ActionType: zone.ZoneActionOpenAll, Zone: 0}
 }
 
 func zoneCloseHandler(w http.ResponseWriter, r *http.Request) {
-	zone, err := strconv.Atoi(r.FormValue("zone"))
+	zoneNum, err := strconv.Atoi(r.FormValue("zone"))
 	if err != nil {
 		fmt.Fprintf(w, "Cannot parse zone")
 		return
 	}
-	if zone < 1 || zone > 7 {
+	if zoneNum < 1 || zoneNum > zone.ZoneCount {
 		fmt.Fprintf(w, "Invalid zone")
 		return
 	}
 
-	valveChan <- valveAction{valveActionCloseOne, zoneValves[zone-1]}
+	zoneActionChan <- zone.ZoneAction{ActionType: zone.ZoneActionCloseOne, Zone: zoneNum}
 }
 
 func zoneCloseAllHandler(w http.ResponseWriter, r *http.Request) {
-	valveChan <- valveAction{valveActionCloseAll, 0}
+	zoneActionChan <- zone.ZoneAction{ActionType: zone.ZoneActionCloseAll, Zone: 0}
 }

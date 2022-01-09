@@ -3,13 +3,16 @@ package main
 import (
 	"log"
 	"net/http"
+
+	"github.com/mitchtalmadge/hydronic-zone-controller/src/gpio"
+	"github.com/mitchtalmadge/hydronic-zone-controller/src/zone"
 )
 
-var valveChan = make(chan valveAction)
+var zoneActionChan = make(chan zone.ZoneAction)
 
 func main() {
-	initGPIO()
-	go handleValveActions(valveChan)
+	gpio.Init()
+	go zone.HandleZoneActions(zoneActionChan)
 
 	http.HandleFunc("/api/zones/open", zoneOpenHandler)
 	http.HandleFunc("/api/zones/openAll", zoneOpenAllHandler)
