@@ -51,9 +51,10 @@ func commit() {
 	// Set zones as desired.
 	for i, open := range zoneOpen {
 		if open {
-			gpio.OpenRelay(i + 2) // Start at relay channel 2
+			// The zone motors are wired such that a closed relay = an open zone.
+			gpio.CloseRelay(i + 2) // Start at relay channel 2
 		} else {
-			gpio.CloseRelay(i + 2)
+			gpio.OpenRelay(i + 2)
 		}
 	}
 

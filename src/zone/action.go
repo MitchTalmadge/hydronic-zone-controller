@@ -25,12 +25,12 @@ func HandleZoneActions(zoneActionChan chan ZoneAction) {
 			closeAllZones()
 		case ZoneActionOpenOne:
 			if zoneAction.Zone < 1 || zoneAction.Zone > ZoneCount {
-				continue
+				panic("OpenOne: Zone invalid")
 			}
 			openZone(zoneAction.Zone)
 		case ZoneActionCloseOne:
 			if zoneAction.Zone < 1 || zoneAction.Zone > ZoneCount {
-				continue
+				panic("CloseOne: Zone invalid")
 			}
 			closeZone(zoneAction.Zone)
 		}
